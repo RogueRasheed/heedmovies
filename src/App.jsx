@@ -16,7 +16,7 @@ export default function App() {
     const [selectedId, setSelectedId] = useState(null);
     const {movies, isLoading, error } = useMovies(query);
 
-    const [watched, setWatched] = useLocalStorageState([]);
+    const [watched, setWatched] = useLocalStorageState([], "watched");
 
  
    function handleSelectMovie(id) {
@@ -223,10 +223,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Genre: genre 
   } = movie;
   
-  const isTop = imdbRating>8;
-  console.log(isTop);
-  
-
+ 
   function handleAdd() {
     const newWatchedMovie = {
       imdbID: selectedId,
@@ -249,7 +246,7 @@ useKey("Escape", onCloseMovie);
     async function getMovieDetails() {
       setIsLoading(true);
     const res = await fetch(
-      `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`,
+      `https://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`,
       { signal: controller.signal }
     );
     const data = await res.json();
@@ -353,12 +350,12 @@ function WatchedMoviesList({ watched, onDeleteWatched }) {
 function WatchedMovie({ movie, onDeleteWatched }) {
   return (
     <li key={movie.imdbID}>
-                    <img src={movie.Poster} alt={`${movie.title} poster`} />
+                    <img src={movie.poster} alt={`${movie.title} poster`} />
                     <h3>{movie.title}</h3>
                     <div>
                       <p>
                         <span>⭐️</span>
-                        <span>{movie.ImdbRating.toFixed(2)}</span>
+                        <span>{movie.imdbRating.toFixed(2)}</span>
                       </p>
                       <p>
                         <span>🌟</span>
