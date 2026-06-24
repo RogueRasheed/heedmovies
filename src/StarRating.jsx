@@ -18,7 +18,8 @@ export default function StarRating({
     color = '#fcc419',
     size= 20,
     className = "",
-    messages = ["Terrible", "Bad", "Okay", "Good", "Amazing"] 
+    messages = ["Terrible", "Bad", "Okay", "Good", "Amazing"],
+    onSetRating,
 }) {
    const [rating, setRating] = useState(0);
    const [tempRating, setTempRating] = useState(0);
@@ -33,7 +34,6 @@ export default function StarRating({
     color,
     fontSize: `${size / 1.5}px`,
 }
-console.log(rating);
 
    return <div style={containerStyle}>
         <div style={starContainerStyle}>

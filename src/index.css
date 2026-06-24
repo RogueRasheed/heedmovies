@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   --color-primary: #3f273f;
   --color-primary-light: #503b50;
@@ -139,8 +141,6 @@ body {
 .list {
   list-style: none;
   padding: 0.8rem 0;
-  overflow-y: auto;
-  overflow-y: hidden;
   height: 100%;
 }
 
