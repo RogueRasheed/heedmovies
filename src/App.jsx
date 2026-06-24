@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Sidebar from "./components/Sidebar";
 import MovieList from "./components/movies/MovieList";
-import MovieModal from "./components/MovieModal";
+import MovieModal from "./components/movies/MovieModal";
 import Loader from "./components/Loader";
 import ErrorMessage from "./components/ErrorMessage";
 import Search from "./components/Search";

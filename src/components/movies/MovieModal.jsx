@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import MovieDetails from "./MovieDetails";
-import { useKey } from "../hooks/useKey";
+import MovieDetails from "../MovieDetails";
+import { useKey } from "../../hooks/useKey";
 
 export default function MovieModal({
   selectedId,
