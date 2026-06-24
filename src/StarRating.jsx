@@ -25,6 +25,7 @@ export default function StarRating({
 
    function handleRating(rating) {
     setRating(rating);
+    onSetRating?.(rating);
    }
    const textStyle = {
     lineHeight: "1",
@@ -32,6 +33,7 @@ export default function StarRating({
     color,
     fontSize: `${size / 1.5}px`,
 }
+console.log(rating);
 
    return <div style={containerStyle}>
         <div style={starContainerStyle}>
