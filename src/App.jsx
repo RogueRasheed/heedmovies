@@ -5,17 +5,16 @@ import MovieModal from "./components/movies/MovieModal";
 import Loader from "./components/Loader";
 import ErrorMessage from "./components/ErrorMessage";
 import { useMovies } from "./hooks/useMovies";
-import { useLocalStorageState } from "./hooks/useLocalStorageState";
 import Navbar from "./components/navigation/Navbar";
+import { useWatchlist } from "./hooks/useWatchlist";
 
 export default function App() {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const { movies, isLoading, error } = useMovies(query);
-  const [watched, setWatched] = useLocalStorageState([], "watched");
   const [view, setView] = useState("search"); // "search" | "watched"
 
-  function handleSelectMovie(id) {
+ function handleSelectMovie(id) {
     setSelectedId(id);
   }
 
@@ -23,13 +22,17 @@ export default function App() {
     setSelectedId(null);
   }
 
-  function handleAddWatched(movie) {
-    setWatched((watched) => [...watched, movie]);
-  }
+  const {
+  watched,
+  watchlist,
+  addToWatchlist,
+  removeFromWatchlist,
+  addWatched,
+  deleteWatched,
+  moveToWatched,
+} = useWatchlist();
 
-  function handleDeleteWatched(id) {
-    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
-  }
+  
 
   return (
     <div className="flex min-h-screen bg-(--color-background-900) text-(--color-text)">
@@ -87,7 +90,7 @@ export default function App() {
         onSelectMovie={handleSelectMovie}
         isWatchedView
         watched={watched}
-        onDeleteWatched={handleDeleteWatched}
+        onDeleteWatched={deleteWatched}
       />
     )}
   </div>
@@ -99,7 +102,9 @@ export default function App() {
         <MovieModal
           selectedId={selectedId}
           onCloseMovie={handleCloseMovie}
-          onAddWatched={handleAddWatched}
+          onAddToWatchlist={addToWatchlist}
+          onMoveToWatched={moveToWatched}
+          watchlist={watchlist}
           watched={watched}
         />
       )}

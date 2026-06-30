@@ -1,15 +1,17 @@
 import { useState, useEffect, useRef } from "react";
-import StarRating from "./StarRating";
-import Loader from "./Loader";
-import { useKey } from "../hooks/useKey";
+import StarRating from "../StarRating";
+import Loader from "../Loader";
+import { useKey } from "../../hooks/useKey";
 
 const KEY = import.meta.env.VITE_OMDB_KEY;
 
 export default function MovieDetails({
   selectedId,
   onCloseMovie,
-  onAddWatched,
   watched,
+  watchlist,
+  onAddToWatchlist,
+  onMoveToWatched,
 }) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -21,6 +23,7 @@ export default function MovieDetails({
   }, [userRating]);
 
   const isWatched = watched.map((m) => m.imdbID).includes(selectedId);
+  const isInWatchlist = watchlist.map((m) => m.imdbID).includes(selectedId);
   const watchedUserRating = watched.find(
     (m) => m.imdbID === selectedId
   )?.userRating;
@@ -37,20 +40,31 @@ export default function MovieDetails({
     Genre: genre,
   } = movie;
 
-  function handleAdd() {
-    const newWatchedMovie = {
-      imdbID: selectedId,
-      title,
-      poster,
-      year,
-      runtime: Number(runtime.split(" ")[0]),
-      userRating,
-      imdbRating: Number(imdbRating),
-      countRatingDecisions: countRef.current,
-    };
-    onAddWatched(newWatchedMovie);
-    onCloseMovie();
-  }
+  function handleAddToWatchlist() {
+  const newWatchlistMovie = {
+    imdbID: selectedId,
+    title,
+    poster,
+    year,
+  };
+  onAddToWatchlist(newWatchlistMovie);
+  onCloseMovie();
+}
+
+function handleMarkWatched() {
+  const newWatchedMovie = {
+    imdbID: selectedId,
+    title,
+    poster,
+    year,
+    runtime: Number(runtime.split(" ")[0]),
+    userRating,
+    imdbRating: Number(imdbRating),
+    countRatingDecisions: countRef.current,
+  };
+  onMoveToWatched(newWatchedMovie);
+  onCloseMovie();
+}
 
   useKey("Escape", onCloseMovie);
 
@@ -98,8 +112,7 @@ export default function MovieDetails({
                 shadow-lg z-10
                 transition-all duration-200
                 hover:scale-110
-              "
-            >
+              ">
               &larr;
             </button>
             <img
@@ -123,16 +136,18 @@ export default function MovieDetails({
           {/* Section */}
           <section className="flex flex-col gap-4 p-8">
             <div className="bg-[var(--color-background-100)] rounded-xl p-5 flex flex-col gap-4 items-center font-semibold">
-              {!isWatched ? (
+              {isWatched ? (
+                // Already watched and rated
+                <p className="text-[var(--color-text-dark)]">
+                  You rated this movie {watchedUserRating} 🌟
+                </p>
+              ) : isInWatchlist ? (
+                // In watchlist — show rating UI to mark as watched
                 <>
-                  <StarRating
-                    maxRating={10}
-                    size={20}
-                    onSetRating={setUserRating}
-                  />
+                  <StarRating maxRating={10} size={20} onSetRating={setUserRating} />
                   {userRating > 0 && (
                     <button
-                      onClick={handleAdd}
+                      onClick={handleMarkWatched}
                       className="
                         bg-[var(--color-primary)] hover:bg-[var(--color-primary-light)]
                         text-[var(--color-text)]
@@ -141,14 +156,24 @@ export default function MovieDetails({
                         cursor-pointer transition-all duration-300
                       "
                     >
-                      + Add to watched
+                      ✓ Mark as Watched
                     </button>
                   )}
                 </>
               ) : (
-                <p className="text-[var(--color-text-dark)]">
-                  You rated this movie {watchedUserRating} 🌟
-                </p>
+                // New movie — show add to watchlist button
+                <button
+                  onClick={handleAddToWatchlist}
+                  className="
+                    bg-[var(--color-primary)] hover:bg-[var(--color-primary-light)]
+                    text-[var(--color-text)]
+                    border-none rounded-full
+                    px-6 py-2 text-sm font-bold
+                    cursor-pointer transition-all duration-300
+                  "
+                >
+                  + Add to Watchlist
+                </button>
               )}
             </div>
             <p className="text-[var(--color-text-dark)]">
