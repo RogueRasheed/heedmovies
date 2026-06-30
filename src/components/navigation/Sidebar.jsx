@@ -1,8 +1,10 @@
 import { useState } from "react";
 
 const navItems = [
-  { id: "search", icon: "🔍", label: "Search" },
-  { id: "watched", icon: "👁", label: "Watchlist" },
+  { id: "home", icon: "🏠", label: "Home" },
+  { id: "recommendations", icon: "⭐", label: "Recommendations" },
+  { id: "watched", icon: "📺", label: "Watched" },
+  { id: "watchlist", icon: "👓", label: "Watchlist" },
 ];
 
 export default function Sidebar({ view, setView, watchedCount }) {
@@ -13,29 +15,26 @@ export default function Sidebar({ view, setView, watchedCount }) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className="
-        relative flex flex-col gap-2
+        relative flex flex-col gap-3
+        justify-center
         bg-[var(--color-background-500)]
         border-r border-[var(--color-background-100)]
-        py-8 px-3
+        py-6 px-3
         transition-all duration-300 ease-in-out
         overflow-hidden
         shrink-0
+        h-screen
       "
-      style={{ width: hovered ? "200px" : "64px" }}
+      style={{ width: hovered ? "220px" : "72px" }}
     >
-      {/* Logo icon */}
-      <div className="flex items-center justify-center mb-6 h-10">
-        <span className="text-3xl shrink-0">🍿</span>
-      </div>
-
-      {/* Nav items */}
+      {/* Nav items only — no duplicate logo here */}
       {navItems.map((item) => (
         <button
           key={item.id}
           onClick={() => setView(item.id)}
           className={`
-            flex items-center gap-3
-            px-3 py-3 rounded-xl
+            flex items-center gap-4
+            px-3 py-3.5 rounded-xl
             border-none cursor-pointer
             transition-all duration-200
             w-full text-left shrink-0
@@ -45,15 +44,14 @@ export default function Sidebar({ view, setView, watchedCount }) {
             }
           `}
         >
-          <span className="text-xl shrink-0 w-6 text-center">{item.icon}</span>
+          <span className="text-2xl shrink-0 w-7 text-center">{item.icon}</span>
           <span
             className="text-sm font-medium whitespace-nowrap overflow-hidden transition-all duration-300"
-            style={{ opacity: hovered ? 1 : 0, maxWidth: hovered ? "120px" : "0px" }}
+            style={{ opacity: hovered ? 1 : 0, maxWidth: hovered ? "140px" : "0px" }}
           >
             {item.label}
           </span>
 
-          {/* Watched count badge */}
           {item.id === "watched" && watchedCount > 0 && (
             <span
               className="

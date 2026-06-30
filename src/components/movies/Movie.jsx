@@ -3,20 +3,26 @@ export default function Movie({ movie, onSelectMovie }) {
     <li
       onClick={() => onSelectMovie(movie.imdbID)}
       className="
-        grid grid-cols-[4rem_1fr] grid-rows-[auto_auto]
-        gap-x-6 items-center
-        px-8 py-4
-        border-b border-[var(--color-background-100)]
-        cursor-pointer
-        transition-all duration-300
-        hover:bg-[var(--color-background-100)]
-      "
+  grid grid-cols-[5rem_1fr] grid-rows-[auto_auto]
+  gap-x-5 items-center
+  px-6 py-4
+  h-24
+  cursor-pointer
+  transition-all duration-300
+  hover:bg-[var(--color-background-100)]
+"
     >
-      <img
-        src={movie.Poster}
-        alt={`${movie.Title} poster`}
-        className="w-full row-span-2 rounded"
-      />
+      {movie.Poster && movie.Poster !== "N/A" ? (
+  <img
+    src={movie.Poster}
+    alt={`${movie.Title} poster`}
+    className="w-full h-full object-cover row-span-2 rounded"
+  />
+) : (
+  <div className="w-full h-full row-span-2 rounded bg-[var(--color-background-100)] flex items-center justify-center text-2xl">
+    🎬
+  </div>
+)}
       <h3 className="text-lg font-semibold text-[var(--color-text)]">
         {movie.Title}
       </h3>
